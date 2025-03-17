@@ -5,6 +5,9 @@
 //  Created by 안지희 on 3/17/25.
 //
 
+
+// 앱 생명주기 -> 앱 실행될 때 초기 설정을 담당
+
 import UIKit
 
 @main
