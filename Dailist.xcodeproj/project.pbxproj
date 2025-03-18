@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		566898292D87FFC100719DA7 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 566898282D87FFC100719DA7 /* FSCalendar */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		566B906D2D87D120007700DC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				566898292D87FFC100719DA7 /* FSCalendar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +130,7 @@
 			);
 			name = Dailist;
 			packageProductDependencies = (
+				566898282D87FFC100719DA7 /* FSCalendar */,
 			);
 			productName = Dailist;
 			productReference = 566B90562D87D11F007700DC /* Dailist.app */;
@@ -208,6 +214,9 @@
 			);
 			mainGroup = 566B904D2D87D11F007700DC;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				566898272D87FFC100719DA7 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 566B90572D87D11F007700DC /* Products */;
 			projectDirPath = "";
@@ -569,6 +578,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		566898272D87FFC100719DA7 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		566898282D87FFC100719DA7 /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 566898272D87FFC100719DA7 /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 566B904E2D87D11F007700DC /* Project object */;
 }
