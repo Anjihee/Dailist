@@ -26,3 +26,21 @@ class MainTabBarController: UITabBarController {
         viewControllers = [homeVC, communityVC, notificationVC, myPageVC]
     }
 }
+
+#if DEBUG
+import SwiftUI
+
+struct MainTabBarControllerPreview: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> MainTabBarController {
+        return MainTabBarController()
+    }
+    
+    func updateUIViewController(_ uiViewController: MainTabBarController, context: Context) {}
+}
+
+struct MainTabBarController_Previews: PreviewProvider {
+    static var previews: some View {
+        MainTabBarControllerPreview()
+    }
+}
+#endif
