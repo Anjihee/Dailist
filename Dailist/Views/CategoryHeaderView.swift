@@ -55,6 +55,8 @@ class CategoryHeaderView:UIView{
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
     private func setupUI(){
         self.backgroundColor = UIColor(white: 0.95, alpha: 1)
         self.layer.cornerRadius = 20
