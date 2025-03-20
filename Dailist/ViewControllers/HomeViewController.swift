@@ -63,7 +63,7 @@ class HomeViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSo
         formatter.dateFormat = "yyyy-MM-dd"
         selectedDate = formatter.string(from: date)
 
-        selectedDateCategories = events[selectedDate]?.keys.isEmpty == false ? Array(events[selectedDate]!.keys) : ["공부", "일상", "동아리"]
+        selectedDateCategories = events[selectedDate]?.keys.isEmpty == false ? Array(events[selectedDate]!.keys) : ["공부", "일상", "개발"]
         tableView.reloadData()
     }
 
