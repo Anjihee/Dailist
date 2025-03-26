@@ -5,10 +5,9 @@
 //  Created by 안지희 on 3/18/25.
 //
 
-
-
 import UIKit
 import FirebaseAuth
+
 
 class LoginViewController: UIViewController {
     
@@ -98,29 +97,24 @@ class LoginViewController: UIViewController {
     @objc private func handleLogin() {
         guard let email = emailTextField.text,
               let password = passwordTextField.text else {
-            print("❌ 이메일 또는 비밀번호가 비어 있음")
             return
         }
 
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
             if let error = error {
-                print("❌ 로그인 실패: \(error)")
-                let alert = UIAlertController(title: "로그인 실패", message: error.localizedDescription, preferredStyle: .alert)
+                print("로그인 실패: 이메일이나 비밀번호를 다시 입력해주세요.")
+                let alert = UIAlertController(title: "로그인 실패", message:"로그", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "확인", style: .default))
                 self?.present(alert, animated: true)
                 return
             }
 
             guard let user = authResult?.user else {
-                print("❌ 로그인은 되었으나 user가 nil")
                 return
             }
 
-            print(" 로그인 성공: \(user.email ?? "no email")")
-
             user.reload { error in
                 if let error = error {
-                    print("❌ 유저 정보 갱신 실패: \(error)")
                     return
                 }
 
