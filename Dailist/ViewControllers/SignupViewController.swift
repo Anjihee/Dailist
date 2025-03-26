@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class SignupViewController: UIViewController {
     
@@ -27,6 +28,15 @@ class SignupViewController: UIViewController {
         signupButton.addTarget(self, action: #selector(handleSignup), for: .touchUpInside)
         
     }
+    
+    private let nameTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "이름을 입력해주세요"
+        textField.borderStyle = .roundedRect
+        textField.autocapitalizationType = .none
+        textField.layer.cornerRadius = 15 // 🔥 모서리를 둥글게
+        return textField
+    }()
     
     //클로저로 UI 선언
     private let emailTextField: UITextField = {
@@ -78,11 +88,10 @@ class SignupViewController: UIViewController {
         return button
     }()
     
-    
 
     //UI 총 배치
     private func setupUI(){
-        let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, confrimpasswordTextField,errorLabel,signupButton])
+        let stackView = UIStackView(arrangedSubviews: [nameTextField, emailTextField, passwordTextField, confrimpasswordTextField,errorLabel,signupButton])
         
         stackView.axis = .vertical
         stackView.spacing = 30
@@ -104,6 +113,7 @@ class SignupViewController: UIViewController {
         
         //개별 필드 높이 조절
         NSLayoutConstraint.activate([
+            nameTextField.heightAnchor.constraint(equalToConstant: 50),
             emailTextField.heightAnchor.constraint(equalToConstant: 50),
             passwordTextField.heightAnchor.constraint(equalToConstant: 50),
             confrimpasswordTextField.heightAnchor.constraint(equalToConstant: 50),
@@ -114,13 +124,14 @@ class SignupViewController: UIViewController {
     
     //메서드
     //이메일 인증 기능
-    
     //회원가입 버튼
     @objc private func handleSignup(){
         //guard -> 안전하게 옵셔널 풀기
         //if else와 비슷하다 값이 있으면 넣고 없으면 지나가
         //각 입력값 넣기
-        guard let email = emailTextField.text,
+        
+        guard let name = nameTextField.text,
+              let email = emailTextField.text,
               let password = passwordTextField.text,
               let confrimPassword = confrimpasswordTextField.text else{
             return
@@ -163,41 +174,53 @@ class SignupViewController: UIViewController {
                                     return
                                 }
                                 
-                                if Auth.auth().currentUser?.isEmailVerified == true {
-                                    // 인증 완료 → 로그인 화면 이동
-                                    print("✅ 이메일 인증됨")
-                                    print("🔥 self.navigationController: \(String(describing: self?.navigationController))")
-                                      
-                                    self?.navigationController?.popViewController(animated: true)
-                
+                        //회원가입 + 이메일 인증 완료
+                        if Auth.auth().currentUser?.isEmailVerified == true {
+                            
+                       //회원가입한 현재 유저를 Firebase Store에 저장
+                        //근데 currentUser라는건 어떤 의미지? uid는?
+                        guard let uid = Auth.auth().currentUser?.uid else { return }
+                        let db = Firestore.firestore()
+                        
+                        let userDate : [String:Any] = [
+                            "name" : name,
+                            "email" : email,
+                            "createAt":FieldValue.serverTimestamp()
+                        ]
+                                
+                                    
+                        //파베 Store에 users라는 테이블이 생성됨
+                        db.collection("users").document(uid).setData(userDate){ error in
+                                if let error = error {
+                                    print("❌ Firestore 저장 실패: \(error.localizedDescription)")
                                 } else {
-                                    // 인증 안 됨 → 안내 알림
-                                    let notVerifiedAlert = UIAlertController(
-                                    title: "아직 인증되지 않았습니다",
-                                    message: "메일 속 링크를 클릭했는지 확인해주세요.",
-                                    preferredStyle: .alert
-                                    )
-                                    notVerifiedAlert.addAction(UIAlertAction(title: "확인", style: .cancel))
-                                    self?.present(notVerifiedAlert, animated: true)
+                                    print("✅ Firestore 저장 완료")
+                                        // 로그인 화면으로 이동
+                                    self?.navigationController?.popViewController(animated: true)
                                 }
-                            })}
-                       }))
-
-                       self?.present(alert, animated: true)
-                   })
-            }
-
-        
+                            }} else {
+                                // 인증 안 됨 → 안내 알림
+                                let notVerifiedAlert = UIAlertController(
+                                title: "아직 인증되지 않았습니다",
+                                message: "메일 속 링크를 클릭했는지 확인해주세요.",
+                                preferredStyle: .alert
+                                )
+                                notVerifiedAlert.addAction(UIAlertAction(title: "확인", style: .cancel))
+                                self?.present(notVerifiedAlert, animated: true)
+                            }
+                        })}
+                    }))
+                //이거 왜하는건데?
+                self?.present(alert, animated: true)
+            })
+        }
     }
     
     
     //에러메세지 자동 제거
     @objc private func textDidChange(){
         errorLabel.isHidden = true
-    }
-    
-
-    
+    }    
 }
 
 
